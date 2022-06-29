@@ -1,0 +1,5 @@
+test/*
+assets/*
+
+Thumbs.db
+.DS_Store
