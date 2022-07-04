@@ -27,7 +27,7 @@ var timeUtils = {
                 logicManager.timeManager.currentDay += 1
                 logicManager.timeManager.currentHour = 0
             }
-            if (logicManager.timeManager.currentTick == logicManager.timeManager.daysPerMonth){
+            if (logicManager.timeManager.currentDay == logicManager.timeManager.daysPerMonth+1){
                 logicManager.timeManager.currentMonth = timeUtils.getNextMonth()
                 logicManager.timeManager.currentDay = 1
             }
