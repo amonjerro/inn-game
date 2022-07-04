@@ -28,5 +28,5 @@ function setUp(){
 
 //General Utility Functions
 function lerp(min_val, max_val, point){
-    return (max_val-min_val)*point
+    return (max_val-min_val)*point+min_val
 }

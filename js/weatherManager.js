@@ -41,6 +41,7 @@ var weatherUtils = {
     },
     tempToString:function(){
         let currentTemp = weatherUtils.getCurrentTemp()
+        currentTemp = Math.round(currentTemp * 10) / 10
         let suffix = ''
         if (logicManager.weatherManager.celsius){
             suffix = 'ºC'

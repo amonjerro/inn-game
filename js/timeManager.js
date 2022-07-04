@@ -1,7 +1,7 @@
 var timeManager = {
     masterClock:null,
     currentTick:0,
-    tickSize:20,
+    tickSize:100,
     ticksPerHour:16,
     currentHour:0,
     hoursPerDay:24,
