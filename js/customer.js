@@ -1,40 +1,72 @@
-customerManager = {
+var customerManager = {
     currentlyStaying:[],
     inQueue:[],
+    base_gold:10,
+    base_level:1,
     appearanceRate:8
 }
 
-RACES = ['HUMAN','DWARF','ELF']
-GENDERS = ['M','F']
-RACE_NAMES ={
+const SPECIES = ['HUMAN','DWARF','ELF']
+const GENDERS = ['M','F']
+const SPECIES_PROPERTY_MAP = {
     'HUMAN':{
-        'F':['Annia', 'Irina', 'Fiona'],
-        'M':['Borden', 'Arthur', 'Thoma']
+        'name':{
+            'F':['Annia', 'Irina', 'Fiona'],
+            'M':['Borden', 'Arthur', 'Thoma']
+        },
+        'starting_gold':10,
+        'prestige_resistance':1
     },
     'DWARF':{
-        'F':['Dunna', 'Gunnar', 'Hilda'],
-        'M':['Eirik', 'Gloin', 'Brunnor']
+        'name':{
+            'F':['Dunna', 'Gunnar', 'Hilda'],
+            'M':['Eirik', 'Gloin', 'Brunnor']
+        },
+        'starting_gold':20,
+        'prestige_resistance':2
     },
     'ELF':{
-        'F':['Elwyn', 'Felnora', 'Alisae'],
-        'M':['Dunael', 'Sallandal', 'Turandal']
+        'name':{
+            'F':['Elwyn', 'Felnora', 'Alisae'],
+            'M':['Dunael', 'Sallandal', 'Turandal']
+        },
+        'starting_gold':15,
+        'prestige_resistance':3
     }
 }
 
-
-
-
-customerLogic = {
+var customerLogic = {
     createCustomer: function(){
-        let race = Math.floor(Math.random()*RACES.length)
-        let gender = Math.floor(Math.random()*GENDERS.length)
-        let name = Math.floor(Math.random()*RACE_NAMES[race][gender].length)
-        return {
+        let race = SPECIES[Math.floor(Math.random()*SPECIES.length)]
+        let gender = GENDERS[Math.floor(Math.random()*GENDERS.length)]
+        console.log(race,gender)
+        let name_index = Math.floor(Math.random()*SPECIES_PROPERTY_MAP[race]['name'][gender].length)
+        let name = SPECIES_PROPERTY_MAP[race]['name'][gender][name_index]
+        let level = customerLogic.calculateStartingLevel(race)
+        let starting_gold = customerLogic.calculateStartingGold(race, level)
+
+        let keyString = 'customer_'+(Math.random()*1000000).toString(16)
+        let new_customer = {
+            customerKey:keyString,
             name:name,
             race:race,
-            gender:gender
+            gender:gender,
+            level:level,
+            gold:starting_gold
         }
+        guiInfoUtils.addCustomerElement(new_customer)
+        logicManager.customerManager.inQueue.push(new_customer)
     },
+    calculateStartingGold:function(race, level){
+        let race_starting_modifier = SPECIES_PROPERTY_MAP[race]['starting_gold']
+        return level * race_starting_modifier * logicManager.customerManager.base_gold
+    },
+    calculateStartingLevel:function(race){
+        let prestige_modifier = Math.floor(Math.random()*logicManager.innManager.prestige)
+        let prestige_resistance = SPECIES_PROPERTY_MAP[race]['prestige_resistance']
+        let possible_level = logicManager.customerManager.base_level * prestige_modifier - prestige_resistance
+        return possible_level > 0 ? possible_level : 1
+    }
 }
 
 logicManager.customerManager = customerManager
