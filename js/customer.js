@@ -44,6 +44,7 @@ var customerLogic = {
         let name = SPECIES_PROPERTY_MAP[race]['name'][gender][name_index]
         let level = customerLogic.calculateStartingLevel(race)
         let starting_gold = customerLogic.calculateStartingGold(race, level)
+        let nights_needed = customerLogic.calculateNightsNeeded(level)
 
         let keyString = 'customer_'+(Math.random()*1000000).toString(16)
         let new_customer = {
@@ -52,7 +53,8 @@ var customerLogic = {
             race:race,
             gender:gender,
             level:level,
-            gold:starting_gold
+            gold:starting_gold,
+            nightsNeeded:nights_needed
         }
         guiInfoUtils.addCustomerElement(new_customer)
         logicManager.customerManager.inQueue.push(new_customer)
@@ -62,10 +64,13 @@ var customerLogic = {
         return level * race_starting_modifier * logicManager.customerManager.base_gold
     },
     calculateStartingLevel:function(race){
-        let prestige_modifier = Math.floor(Math.random()*logicManager.innManager.prestige)
+        let prestige_modifier = Math.floor(Math.random()*gameState.prestige)
         let prestige_resistance = SPECIES_PROPERTY_MAP[race]['prestige_resistance']
         let possible_level = logicManager.customerManager.base_level * prestige_modifier - prestige_resistance
         return possible_level > 0 ? possible_level : 1
+    },
+    calculateNightsNeeded:function(level){
+        return Math.floor(Math.random()*level)+1
     }
 }
 

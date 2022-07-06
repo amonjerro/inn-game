@@ -1,11 +1,26 @@
 var gameState = {
-    'gold':2000,
-    'upkeep':0,
-    'wood':50,
-    'food':20,
-    'constructedRooms':[],
-    'staff':[],
-    'setting_up':true
+    resources:{
+        gold:2000,
+        wood:50,
+        food:20,
+        stone:0
+    },
+
+    upkeep:{
+        gold:0,
+        wood:0,
+        food:0,
+        stone:0
+    },    
+    prestige:1,
+    constructedRooms:[],
+    staff:[],
+    isCurrentlyBulding:false,
+    currentlyBuilding:{
+        progress:0,
+        building:null
+    },
+    setting_up:true
 }
 
 var logicManager = {

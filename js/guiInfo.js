@@ -44,16 +44,30 @@ var guiInfoUtils = {
     },
     addCustomerElement:function(customer){
         let customer_div = document.createElement('div')
-        customer_div.classList.add(['customer','fade-in'])
+        customer_div.classList.add('customer', 'fade-in')
         customer_div.id = customer.customerKey
 
+        let name_div = document.createElement('div')
+        name_div.classList.add('customer', 'name')
         let name_span = document.createElement('span')
-        name_span.classList.add(['customer','name'])
         let name_text = document.createTextNode(customer.name)
         name_span.appendChild(name_text)
+        name_div.appendChild(name_span)
 
+        let night_div = document.createElement('div')
+        night_div.classList.add('customer', 'nights')
+        let night_infoSpan = document.createElement('span')
+        let night_infoText = document.createTextNode('Nights Needed: ')
 
-        customer_div.appendChild(name_span)
+        let night_span = document.createElement('span')
+        let nights_text = document.createTextNode(customer.nightsNeeded)
+        night_span.appendChild(nights_text)
+        night_infoSpan.appendChild(night_infoText)
+        night_div.appendChild(night_infoSpan)
+        night_div.appendChild(night_span)
+
+        customer_div.appendChild(name_div)
+        customer_div.appendChild(night_div)
         guiManager.customerQueue.appendChild(customer_div)
 
     },
