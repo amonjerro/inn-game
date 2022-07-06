@@ -39,7 +39,7 @@ var customerLogic = {
     createCustomer: function(){
         let race = SPECIES[Math.floor(Math.random()*SPECIES.length)]
         let gender = GENDERS[Math.floor(Math.random()*GENDERS.length)]
-        console.log(race,gender)
+
         let name_index = Math.floor(Math.random()*SPECIES_PROPERTY_MAP[race]['name'][gender].length)
         let name = SPECIES_PROPERTY_MAP[race]['name'][gender][name_index]
         let level = customerLogic.calculateStartingLevel(race)

@@ -17,13 +17,15 @@ var guiInfoUtils = {
             throw 'Clock Span not found'
         }
 
+        //Calendar
         let dateSpan = document.getElementById('date_span')
         if (dateSpan){
             guiManager.dateSpan = dateSpan
         } else {
             throw 'Day Span not found'
         }
-
+        
+        //Temperature
         let tempSpan = document.getElementById('temp_span')
         if (tempSpan){
             guiManager.tempSpan = tempSpan
@@ -31,6 +33,7 @@ var guiInfoUtils = {
             throw 'Temp Span not found'
         }
 
+        //Customer Queue
         let customerQueue = document.getElementById('customer_queue')
         if(customerQueue){
             guiManager.customerQueue = customerQueue
@@ -38,6 +41,41 @@ var guiInfoUtils = {
             throw 'Customer Queue not found'
         }
 
+        //Available Buildings
+        let availableBuildings = document.getElementById('building_options')
+        if (availableBuildings){
+            guiManager.availableBuildings = availableBuildings
+        } else {
+            throw 'Available Buildings Div not found'
+        }
+
+    },
+    removeAvailableBuilding:function(id){
+        let buildingElement = document.getElementById(id)
+        buildingElement.remove()
+    },
+    addAvailableBuilding:function(building){
+        let buidling_div = document.createElement('div')
+        buidling_div.classList.add('building', 'fade-in')
+        buidling_div.id = building.key
+
+        let name_div = document.createElement('div')
+        name_div.classList.add('building', 'name')
+        let name_span = document.createElement('span')
+        name_span.classList.add('building', 'title')
+        let name_text = document.createTextNode(building.name)
+        name_span.appendChild(name_text)
+        name_div.appendChild(name_span)
+
+        let description_span = document.createElement('span')
+        let descriptionText = document.createTextNode(buidling.description)
+        description_span.classList.add('building', 'subtitle')
+
+        description_span.appendChild(descriptionText)
+        name_div.appendChild(description_span)
+
+        building_div.appendChild(name_div)
+        availableBuildings.appendChild(building_div)
     },
     updateText:function(element, message){
         element.innerHTML = message
