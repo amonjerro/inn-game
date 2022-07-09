@@ -31,6 +31,7 @@ function setUp(){
     try{
         guiInfoUtils.detectElements()
         weatherUtils.setHourlyTemps()
+        buildUtils.initializeAvailableBuildingList()
         timeUtils.startClock()
         gameState.setting_up = false
         console.log('Done setting up!')

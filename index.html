@@ -15,26 +15,37 @@
         <script src="js/customer.js"></script>
     </head>
     <body>
-        <div id="calendar">
-            <div id="clock">
-                <span id="clock_span"></span>
+        <div id="main-container">
+            <div id="header">
+                <div id="calendar">
+                    <div id="clock">
+                        <span id="clock_span"></span>
+                    </div>
+                    <div id="date">
+                        <span id="date_span"></span>
+                    </div>
+                    <div id="weather">
+                        <span id="temp_span"></span>
+                        <span id="precip_span"></span>
+                    </div>
+                </div>
+                <div id="resources">
+    
+                </div>
             </div>
-            <div id="date">
-                <span id="date_span"></span>
+            <div id="aside">
+                <div id="building_options">
+    
+                </div>
             </div>
-            <div id="weather">
-                <span id="temp_span"></span>
-                <span id="precip_span"></span>
+            <div id="central">
+                <div id="customer_queue">
+                    <button onclick="customerLogic.createCustomer()">Create a Customer</button>
+                </div>
             </div>
-        </div>
-        <div id="resources">
+            <div id="footer">
 
-        </div>
-        <div id="customer_queue">
-            <button onclick="customerLogic.createCustomer()">Create a Customer</button>
-        </div>
-        <div id="building_options">
-
+            </div>
         </div>
         <script>
             setUp()

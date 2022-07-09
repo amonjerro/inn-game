@@ -55,9 +55,9 @@ var guiInfoUtils = {
         buildingElement.remove()
     },
     addAvailableBuilding:function(building){
-        let buidling_div = document.createElement('div')
-        buidling_div.classList.add('building', 'fade-in')
-        buidling_div.id = building.key
+        let building_div = document.createElement('div')
+        building_div.classList.add('building', 'fade-in')
+        building_div.id = building.key
 
         let name_div = document.createElement('div')
         name_div.classList.add('building', 'name')
@@ -68,14 +68,17 @@ var guiInfoUtils = {
         name_div.appendChild(name_span)
 
         let description_span = document.createElement('span')
-        let descriptionText = document.createTextNode(buidling.description)
+        let descriptionText = document.createTextNode(building.description)
         description_span.classList.add('building', 'subtitle')
 
         description_span.appendChild(descriptionText)
         name_div.appendChild(description_span)
 
         building_div.appendChild(name_div)
-        availableBuildings.appendChild(building_div)
+        building_div.onclick = function(event){
+            console.log(event.target)
+        }
+        guiManager.availableBuildings.appendChild(building_div)
     },
     updateText:function(element, message){
         element.innerHTML = message
