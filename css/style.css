@@ -37,13 +37,42 @@ body {
 }
 
 #building_options{
-    
+    padding: 2px;
 }
 
-div.building{
-
+.building.subtitle{
+    font-size:0.7em;
 }
 
-.fade-in{
+.building-container{
+    border:1px #eee solid;
+    border-radius:5px;
+    padding:4px 6px;
+    margin-top:5px;
+}
 
+.building-container:hover{
+    background:#aaa;
+    color:#000;
+}
+
+.progress-container{
+    box-sizing: border-box;
+    padding:5px;
+}
+
+.progress-bar-bg{
+    background:#333;
+    border-radius:5px;
+    width:100%;
+    min-height:10px;
+    box-sizing: border-box;
+}
+
+.progress-bar-progress{
+    background:#33aa55;
+    border-radius:5px;
+    min-height:10px;
+    width:0%;
+    box-sizing: border-box;
 }

@@ -73,12 +73,15 @@ var buildUtils = {
         let building = buildings[building_name].fn()
         gameState.isCurrentlyBulding = true
         gameState.currentlyBuilding.building = building
+
+        guiInfoUtils.setUpBuildingProgress(building)
     },
     initializeAvailableBuildingList:function(){
         let keys = Object.keys(buildings)
         for (let k = 0; k < keys.length; k++){
             if (buildings[keys[k]].isAvailable){
-                guiInfoUtils.addAvailableBuilding(buildings[keys[k]])
+
+                guiInfoUtils.addAvailableBuilding(buildings[keys[k]], keys[k])
             }
         }
     }

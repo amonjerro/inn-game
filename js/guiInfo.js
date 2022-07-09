@@ -49,36 +49,80 @@ var guiInfoUtils = {
             throw 'Available Buildings Div not found'
         }
 
+        //Building Progress
+        let buildingProgress = document.getElementById('building_progress')
+        if(buildingProgress){
+            guiManager.buildingProgress = buildingProgress
+        } else {
+            throw 'Building Progress Div not found'
+        }
     },
     removeAvailableBuilding:function(id){
         let buildingElement = document.getElementById(id)
         buildingElement.remove()
     },
-    addAvailableBuilding:function(building){
+    addAvailableBuilding:function(building, key){
         let building_div = document.createElement('div')
-        building_div.classList.add('building', 'fade-in')
-        building_div.id = building.key
+        building_div.classList.add('building-container', 'fade-in')
+        building_div.id = key
+        building_div.dataset.key = key
 
-        let name_div = document.createElement('div')
-        name_div.classList.add('building', 'name')
+        let head_div = document.createElement('div')
+        head_div.classList.add('building', 'head')
+        let body_div = document.createElement('div')
+        body_div.classList.add('building', 'body')
+
+
         let name_span = document.createElement('span')
         name_span.classList.add('building', 'title')
         let name_text = document.createTextNode(building.name)
         name_span.appendChild(name_text)
-        name_div.appendChild(name_span)
+        head_div.appendChild(name_span)
 
         let description_span = document.createElement('span')
+        description_span.classList.add('building')
         let descriptionText = document.createTextNode(building.description)
         description_span.classList.add('building', 'subtitle')
 
         description_span.appendChild(descriptionText)
-        name_div.appendChild(description_span)
+        body_div.appendChild(description_span)
 
-        building_div.appendChild(name_div)
+        
+        building_div.appendChild(head_div)
+        building_div.appendChild(body_div)
         building_div.onclick = function(event){
-            console.log(event.target)
+            container = event.target.closest('.building-container')
+            console.log(container)
+            buildUtils.assignBuilding(container.dataset.key)
         }
         guiManager.availableBuildings.appendChild(building_div)
+    },
+    setUpBuildingProgress:function(building){
+        let progress_div = document.createElement('div')
+        progress_div.classList.add('progress-container')
+
+        let progress_bar_container = document.createElement('div')
+        let progress_text_container = document.createElement('span')
+        progress_text_container.classList.add('progress-text')
+        progress_text_container.appendChild(document.createTextNode('Progresss'))
+
+
+        progress_bar_container.classList.add('progress-bar-bg')
+        let progress_bar_bar = document.createElement('div')
+        progress_bar_bar.classList.add('progress-bar-progress')
+        
+        progress_div.appendChild(progress_text_container)
+        progress_bar_container.appendChild(progress_bar_bar)
+        progress_div.appendChild(progress_bar_container)
+        guiManager.buildingProgress.appendChild(progress_div)
+    },
+    updateBuildingProgress:function(progress_percentage){
+        let prc = ''+progress_percentage+'%'
+        let progress_container = document.getElementById('progress-container')
+        progress_container.children[0].style.width = prc
+    },
+    tearDownBuildingProgress:function(){
+        guiManager.buildingProgress.children[0].remove()
     },
     updateText:function(element, message){
         element.innerHTML = message
