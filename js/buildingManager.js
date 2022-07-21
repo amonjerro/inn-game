@@ -73,7 +73,6 @@ var buildUtils = {
         let building = buildings[building_name].fn()
         gameState.isCurrentlyBulding = true
         gameState.currentlyBuilding.building = building
-
         guiInfoUtils.setUpBuildingProgress(building)
     },
     initializeAvailableBuildingList:function(){

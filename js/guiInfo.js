@@ -56,6 +56,14 @@ var guiInfoUtils = {
         } else {
             throw 'Building Progress Div not found'
         }
+
+        //Message Toast
+        let messageToast = document.getElementById('toast')
+        if (messageToast){
+            guiManager.messageToast = messageToast
+        } else {
+            throw 'No Message Toast Div found'
+        }
     },
     removeAvailableBuilding:function(id){
         let buildingElement = document.getElementById(id)
@@ -92,7 +100,10 @@ var guiInfoUtils = {
         building_div.appendChild(body_div)
         building_div.onclick = function(event){
             container = event.target.closest('.building-container')
-            console.log(container)
+            if (gameState.isCurrentlyBulding){
+                guiInfoUtils.showToast('Something is already being built!', 'error')
+                return null
+            }
             buildUtils.assignBuilding(container.dataset.key)
         }
         guiManager.availableBuildings.appendChild(building_div)
@@ -159,6 +170,16 @@ var guiInfoUtils = {
     removeCustomerElement:function(key){
         let customerElement = document.getElementById(key)
         customerElement.remove();
+    },
+    showToast:function(message, toastType){
+        let messageToastSpan = guiManager.messageToast.children[0]
+        messageToastSpan.innerHTML = message
+        guiManager.messageToast.classList.add('awake-toast', toastType)
+        guiManager.messageToast.classList.remove('asleep-toast')
+        setTimeout(()=>{
+            guiManager.messageToast.classList.add('asleep-toast')
+            guiManager.messageToast.classList.remove('awake-toast', toastType)
+        }, 2000)
     }
 }
 

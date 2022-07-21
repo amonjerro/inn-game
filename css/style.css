@@ -76,3 +76,26 @@ body {
     width:0%;
     box-sizing: border-box;
 }
+
+.toast{
+    padding:5px;
+    margin:4px;
+    border-radius:5px;
+    text-align:center;
+    transition: visibility linear 200ms, opacity 400ms;
+}
+
+.awake-toast{
+    visibility: visible;
+    opacity:1;
+}
+
+.asleep-toast{
+    visibility: hidden;
+    opacity: 0;
+}
+
+.error{
+    background:linear-gradient(#AA3333, #651212);
+    color:#fff;
+}
