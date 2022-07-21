@@ -27,10 +27,7 @@ var gameState = {
     occupiedRooms:[],
     staff:[],
     isCurrentlyBulding:false,
-    currentlyBuilding:{
-        progress:0,
-        building:null
-    },
+    currentlyBuilding:null,
     setting_up:true
 }
 
@@ -42,6 +39,7 @@ function setUp(){
     try{
         guiInfoUtils.detectElements()
         weatherUtils.setHourlyTemps()
+        buildUtils.hashUpHalfBuilts()
         buildUtils.initializeAvailableBuildingList()
         timeUtils.startClock(logicManager.timeManager.normalTickSize)
         gameState.setting_up = false

@@ -4,7 +4,9 @@ let buildingFactory = {
             upkeep:{food:0,gold:3,wood:0,stone:0},
             spaces:{staff:0,guests:2},
             isRoom:true,
-            buildTime:5
+            buildTime:5,
+            progress:0,
+            key:'ROOM_S'
         }
     },
     buildMiddleRoom:function(){
@@ -12,7 +14,9 @@ let buildingFactory = {
             upkeep:{food:0,gold:10,wood:0,stone:0},
             spaces:{staff:0,guests:4},
             isRoom:true,
-            buildTime:10
+            buildTime:10,
+            progress:0,
+            key:'ROOM_M'
         }
     },
     buildLargeRoom:function(){
@@ -20,7 +24,9 @@ let buildingFactory = {
             upkeep:{food:0,gold:40,wood:0,stone:0},
             spaces:{staff:0,guests:8},
             isRoom:true,
-            buildTime:15
+            buildTime:15,
+            progress:0,
+            key:'ROOM_L'
         }
     },
     buildTavern:function(){
@@ -28,7 +34,9 @@ let buildingFactory = {
             upkeep:{food:0,gold:30,wood:20,stone:0},
             spaces:{staff:4,guests:20},
             isRoom:false,
-            buildTime:28
+            buildTime:28,
+            progress:0,
+            key:'TAVERN'
         }
     }
 }
@@ -72,12 +80,23 @@ let buildings = {
     }
 }
 
+var buildingManager = {
+    halfBuiltBuildings:{}
+}
+
 var buildUtils = {
     assignBuilding:function(building_name){
-        let building = buildings[building_name].fn()
+        let building = null
+        if (logicManager.buildingManager.halfBuiltBuildings[building_name]){
+            building = logicManager.buildingManager.halfBuiltBuildings[building_name]
+        }
+        if (!building){
+            building = buildings[building_name].fn()
+        }
         gameState.isCurrentlyBulding = true
-        gameState.currentlyBuilding.building = building
-        guiInfoUtils.setUpBuildingProgress(building)
+        gameState.currentlyBuilding = building
+        guiInfoUtils.setUpBuildingProgress()
+        buildUtils.showProgress()
     },
     initializeAvailableBuildingList:function(){
         let keys = Object.keys(buildings)
@@ -88,6 +107,40 @@ var buildUtils = {
             }
         }
     },
+    killBuilding:function(){
+        //Stop the building progress
+        gameState.isCurrentlyBulding = false;
+            
+        //Unset the progress asignment
+        guiInfoUtils.tearDownBuildingProgress()
+
+        //Update the game state
+        let building = gameState.currentlyBuilding
+        gameState.currentlyBuilding = null 
+        return building
+    },
+    cancelBuild:function(){
+        let building = buildUtils.killBuilding()
+        logicManager.buildingManager.halfBuiltBuildings[building.key] = building
+    },
+    wrapUpBuilding:function(){
+        let building = buildUtils.killBuilding()
+        gameState.upkeep.food += building.upkeep.food
+        gameState.upkeep.gold += building.upkeep.gold
+        gameState.upkeep.wood += building.upkeep.wood
+        gameState.upkeep.stone += building.upkeep.stone
+
+        gameState.spaces.staff += building.spaces.staff
+        gameState.spaces.guests += building.spaces.guests
+
+        if (building.isRoom){
+            gameState.availableRooms.push({
+                guests:[],
+                max_vacancy:building.spaces.guests
+            })
+        }
+        logicManager.buildingManager.halfBuiltBuildings[building.key] = null
+    },
     updateProgress:function(){
         if (!gameState.isCurrentlyBulding){
             return false;
@@ -95,39 +148,23 @@ var buildUtils = {
 
         gameState.currentlyBuilding.progress += gameState.generation.building;
 
-        if (gameState.currentlyBuilding.progress == gameState.currentlyBuilding.building.buildTime){
-            //Stop the building progress
-            gameState.isCurrentlyBulding = false;
-            
-            //Unset the progress asignment
-            guiInfoUtils.tearDownBuildingProgress()
-
-            //Update the game state
-            let building = gameState.currentlyBuilding.building
-
-            gameState.upkeep.food += building.upkeep.food
-            gameState.upkeep.gold += building.upkeep.gold
-            gameState.upkeep.wood += building.upkeep.wood
-            gameState.upkeep.stone += building.upkeep.stone
-
-            gameState.spaces.staff += building.spaces.staff
-            gameState.spaces.guests += building.spaces.guests
-
-            if (building.isRoom){
-                gameState.availableRooms.push({
-                    guests:[],
-                    max_vacancy:building.spaces.guests
-                })
-            }
-
-            gameState.currentlyBuilding = {}
-
+        if (gameState.currentlyBuilding.progress == gameState.currentlyBuilding.buildTime){
+            buildUtils.wrapUpBuilding()
             return false;
         }
-
-        let pf = gameState.currentlyBuilding.progress / gameState.currentlyBuilding.building.buildTime
+        buildUtils.showProgress()
+    },
+    showProgress:function(){
+        let pf = gameState.currentlyBuilding.progress / gameState.currentlyBuilding.buildTime
         let perc = to_percent(pf)
         guiInfoUtils.updateBuildingProgress(perc)
+    },
+    hashUpHalfBuilts:function(){
+        let keys = Object.keys(buildings)
+        for (let k = 0; k < keys.length; k++){
+            logicManager.buildingManager.halfBuiltBuildings[keys[k]] = null
+        }
     }
 }
 
+logicManager.buildingManager = buildingManager

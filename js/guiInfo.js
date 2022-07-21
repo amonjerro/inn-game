@@ -112,7 +112,7 @@ var guiInfoUtils = {
         building = document.getElementById(key)
         building.classList.add('fade-in', 'building-showing')
     },
-    setUpBuildingProgress:function(building){
+    setUpBuildingProgress:function(){
         let progress_div = document.createElement('div')
         progress_div.classList.add('progress-container')
 
@@ -125,10 +125,15 @@ var guiInfoUtils = {
         progress_bar_container.classList.add('progress-bar-bg')
         let progress_bar_bar = document.createElement('div')
         progress_bar_bar.classList.add('progress-bar-progress')
+
+        let progress_bar_stop = document.createElement('button')
+        progress_bar_stop.innerHTML = 'Cancel'
+        progress_bar_stop.onclick = buildUtils.cancelBuild
         
         progress_div.appendChild(progress_text_container)
         progress_bar_container.appendChild(progress_bar_bar)
         progress_div.appendChild(progress_bar_container)
+        progress_div.appendChild(progress_bar_stop)
         guiManager.buildingProgress.appendChild(progress_div)
     },
     updateBuildingProgress:function(progress_percentage){
