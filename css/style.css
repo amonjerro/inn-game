@@ -49,6 +49,14 @@ body {
     border-radius:5px;
     padding:4px 6px;
     margin-top:5px;
+    visibility: hidden;
+    opacity:0;
+    display:none;
+    transition: visibility linear 0ms, opacity 800ms;
+}
+
+.building-showing{
+    display:block;
 }
 
 .building-container:hover{
@@ -75,6 +83,7 @@ body {
     min-height:10px;
     width:0%;
     box-sizing: border-box;
+    transition: width ease-in-out 200ms;
 }
 
 .toast{
@@ -85,17 +94,22 @@ body {
     transition: visibility linear 200ms, opacity 400ms;
 }
 
-.awake-toast{
+.fade-in{
     visibility: visible;
     opacity:1;
 }
 
-.asleep-toast{
+.fade-out{
     visibility: hidden;
     opacity: 0;
 }
 
 .error{
     background:linear-gradient(#AA3333, #651212);
+    color:#fff;
+}
+
+.success{
+    background:linear-gradient(#33AA33, #126512);
     color:#fff;
 }

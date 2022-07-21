@@ -5,15 +5,26 @@ var gameState = {
         food:20,
         stone:0
     },
-
     upkeep:{
         gold:0,
         wood:0,
         food:0,
         stone:0
-    },    
+    },
+    spaces:{
+        staff:0,
+        guests:0
+    },
     prestige:1,
-    constructedRooms:[],
+    generation:{
+        building:1,
+        gold:0,
+        food:0,
+        wood:0,
+        stone:0
+    },
+    availableRooms:[],
+    occupiedRooms:[],
     staff:[],
     isCurrentlyBulding:false,
     currentlyBuilding:{
@@ -32,7 +43,7 @@ function setUp(){
         guiInfoUtils.detectElements()
         weatherUtils.setHourlyTemps()
         buildUtils.initializeAvailableBuildingList()
-        timeUtils.startClock()
+        timeUtils.startClock(logicManager.timeManager.normalTickSize)
         gameState.setting_up = false
         console.log('Done setting up!')
     } catch(e){
@@ -45,4 +56,8 @@ function setUp(){
 //General Utility Functions
 function lerp(min_val, max_val, point){
     return (max_val-min_val)*point+min_val
+}
+
+function to_percent(float_value){
+    return Math.round(float_value * 100)
 }

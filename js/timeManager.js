@@ -1,7 +1,9 @@
 var timeManager = {
     masterClock:null,
     currentTick:0,
-    tickSize:100,
+    normalTickSize:100,
+    fastTickSize:75,
+    ultraFastTickSize:50,
     ticksPerHour:16,
     currentHour:0,
     hoursPerDay:24,
@@ -15,7 +17,7 @@ const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', '
 
 
 var timeUtils = {
-    startClock: function (){
+    startClock: function (tickSize){
         logicManager.timeManager.masterClock = setInterval(function(){
             logicManager.timeManager.currentTick += 1
             if (logicManager.timeManager.currentTick == logicManager.timeManager.ticksPerHour){
@@ -24,6 +26,9 @@ var timeUtils = {
                 weatherUtils.setHourlyTemps()
             }
             if (logicManager.timeManager.currentHour == logicManager.timeManager.hoursPerDay){
+                //Update building progress
+                buildUtils.updateProgress()
+
                 logicManager.timeManager.currentDay += 1
                 logicManager.timeManager.currentHour = 0
             }
@@ -38,9 +43,21 @@ var timeUtils = {
 
             //Update Temperature
             guiInfoUtils.updateText(guiManager.tempSpan, weatherUtils.tempToString())
+            
 
-
-        }, logicManager.timeManager.tickSize)
+        }, tickSize)
+    },
+    setSpeedToNormal:function(){
+        timeUtils.stopClock()
+        timeUtils.startClock(logicManager.timeManager.normalTickSize)
+    },
+    setSpeedToFast:function(){
+        timeUtils.stopClock()
+        timeUtils.startClock(logicManager.timeManager.fastTickSize)
+    },
+    setSpeedToUltraFast:function(){
+        timeUtils.stopClock()
+        timeUtils.startClock(logicManager.timeManager.ultraFastTickSize)
     },
     getNextMonth:function(){
         return (logicManager.timeManager.currentMonth + 1)%MONTHS.length

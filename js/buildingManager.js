@@ -1,29 +1,33 @@
 let buildingFactory = {
     buildSmallRoom:function(){
         return {
-            upkeep:{gold:3,wood:0,stone:0},
+            upkeep:{food:0,gold:3,wood:0,stone:0},
             spaces:{staff:0,guests:2},
+            isRoom:true,
             buildTime:5
         }
     },
     buildMiddleRoom:function(){
         return {
-            upkeep:{gold:10,wood:0,stone:0},
+            upkeep:{food:0,gold:10,wood:0,stone:0},
             spaces:{staff:0,guests:4},
+            isRoom:true,
             buildTime:10
         }
     },
     buildLargeRoom:function(){
         return {
-            upkeep:{gold:40,wood:0,stone:0},
+            upkeep:{food:0,gold:40,wood:0,stone:0},
             spaces:{staff:0,guests:8},
+            isRoom:true,
             buildTime:15
         }
     },
     buildTavern:function(){
         return {
-            upkeep:{gold:30,wood:20,stone:0},
+            upkeep:{food:0,gold:30,wood:20,stone:0},
             spaces:{staff:4,guests:20},
+            isRoom:false,
             buildTime:28
         }
     }
@@ -78,11 +82,52 @@ var buildUtils = {
     initializeAvailableBuildingList:function(){
         let keys = Object.keys(buildings)
         for (let k = 0; k < keys.length; k++){
+            guiInfoUtils.addAvailableBuilding(buildings[keys[k]], keys[k])
             if (buildings[keys[k]].isAvailable){
-
-                guiInfoUtils.addAvailableBuilding(buildings[keys[k]], keys[k])
+                guiInfoUtils.showBuilding(keys[k])
             }
         }
+    },
+    updateProgress:function(){
+        if (!gameState.isCurrentlyBulding){
+            return false;
+        }
+
+        gameState.currentlyBuilding.progress += gameState.generation.building;
+
+        if (gameState.currentlyBuilding.progress == gameState.currentlyBuilding.building.buildTime){
+            //Stop the building progress
+            gameState.isCurrentlyBulding = false;
+            
+            //Unset the progress asignment
+            guiInfoUtils.tearDownBuildingProgress()
+
+            //Update the game state
+            let building = gameState.currentlyBuilding.building
+
+            gameState.upkeep.food += building.upkeep.food
+            gameState.upkeep.gold += building.upkeep.gold
+            gameState.upkeep.wood += building.upkeep.wood
+            gameState.upkeep.stone += building.upkeep.stone
+
+            gameState.spaces.staff += building.spaces.staff
+            gameState.spaces.guests += building.spaces.guests
+
+            if (building.isRoom){
+                gameState.availableRooms.push({
+                    guests:[],
+                    max_vacancy:building.spaces.guests
+                })
+            }
+
+            gameState.currentlyBuilding = {}
+
+            return false;
+        }
+
+        let pf = gameState.currentlyBuilding.progress / gameState.currentlyBuilding.building.buildTime
+        let perc = to_percent(pf)
+        guiInfoUtils.updateBuildingProgress(perc)
     }
 }
 

@@ -71,7 +71,7 @@ var guiInfoUtils = {
     },
     addAvailableBuilding:function(building, key){
         let building_div = document.createElement('div')
-        building_div.classList.add('building-container', 'fade-in')
+        building_div.classList.add('building-container')
         building_div.id = key
         building_div.dataset.key = key
 
@@ -108,6 +108,10 @@ var guiInfoUtils = {
         }
         guiManager.availableBuildings.appendChild(building_div)
     },
+    showBuilding(key){
+        building = document.getElementById(key)
+        building.classList.add('fade-in', 'building-showing')
+    },
     setUpBuildingProgress:function(building){
         let progress_div = document.createElement('div')
         progress_div.classList.add('progress-container')
@@ -115,7 +119,7 @@ var guiInfoUtils = {
         let progress_bar_container = document.createElement('div')
         let progress_text_container = document.createElement('span')
         progress_text_container.classList.add('progress-text')
-        progress_text_container.appendChild(document.createTextNode('Progresss'))
+        progress_text_container.appendChild(document.createTextNode('Progress'))
 
 
         progress_bar_container.classList.add('progress-bar-bg')
@@ -129,8 +133,8 @@ var guiInfoUtils = {
     },
     updateBuildingProgress:function(progress_percentage){
         let prc = ''+progress_percentage+'%'
-        let progress_container = document.getElementById('progress-container')
-        progress_container.children[0].style.width = prc
+        let progressbar = document.querySelector('.progress-bar-progress')
+        progressbar.style.width = prc
     },
     tearDownBuildingProgress:function(){
         guiManager.buildingProgress.children[0].remove()
@@ -174,11 +178,11 @@ var guiInfoUtils = {
     showToast:function(message, toastType){
         let messageToastSpan = guiManager.messageToast.children[0]
         messageToastSpan.innerHTML = message
-        guiManager.messageToast.classList.add('awake-toast', toastType)
-        guiManager.messageToast.classList.remove('asleep-toast')
+        guiManager.messageToast.classList.add('fade-in', toastType)
+        guiManager.messageToast.classList.remove('fade-out')
         setTimeout(()=>{
-            guiManager.messageToast.classList.add('asleep-toast')
-            guiManager.messageToast.classList.remove('awake-toast', toastType)
+            guiManager.messageToast.classList.add('fade-out')
+            guiManager.messageToast.classList.remove('fade-in', toastType)
         }, 2000)
     }
 }

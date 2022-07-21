@@ -20,6 +20,11 @@
                 <div id="calendar">
                     <div id="clock">
                         <span id="clock_span"></span>
+                        <div id="speed-buttons">
+                            <button onclick="timeUtils.setSpeedToNormal()">Normal</button>
+                            <button onclick="timeUtils.setSpeedToFast()">Quick</button>
+                            <button onclick="timeUtils.setSpeedToUltraFast()">Ultra Fast</button>
+                        </div>
                     </div>
                     <div id="date">
                         <span id="date_span"></span>
@@ -37,7 +42,7 @@
                 <div id="building_options">
     
                 </div>
-                <div id="toast" class="toast asleep-toast">
+                <div id="toast" class="toast fade-out">
                     <span></span>
                 </div>
             </div>
